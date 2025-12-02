@@ -2,7 +2,7 @@ defmodule Day1 do
   def part1 do
     parse_moves()
     |> process_moves()
-    |> Enum.count(fn info -> elem(info, 0) == 0 end)
+    |> Enum.count(fn {pos, _} -> pos == 0 end)
   end
 
   def part2 do
@@ -14,8 +14,8 @@ defmodule Day1 do
   end
 
   defp process_moves(moves) do
-    Enum.flat_map_reduce(moves, 50, fn {dir, dist_str}, acc ->
-      m = process_move(acc, dir, String.to_integer(dist_str))
+    Enum.flat_map_reduce(moves, 50, fn {dir, dist}, acc ->
+      m = process_move(acc, dir, dist)
       {[m], elem(m, 0)}
     end)
     |> elem(0)
@@ -58,6 +58,7 @@ defmodule Day1 do
     |> Enum.map(fn s ->
       String.trim(s)
       |> String.split_at(1)
+      |> then(fn {dir, num} -> {dir, String.to_integer(num)} end)
     end)
   end
 end
