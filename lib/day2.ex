@@ -45,10 +45,13 @@ defmodule Day2 do
     1..div(length(digits), 2)
     |> Enum.any?(fn size ->
       Enum.chunk_every(digits, size)
-      |> Enum.uniq()
-      |> length() == 1
+      |> repeating_list?()
     end)
   end
+
+  def repeating_list?([_a]), do: true
+  def repeating_list?([a, b | _r]) when a != b, do: false
+  def repeating_list?([_a, b | r]), do: repeating_list?([b | r])
 
   defp parse_ranges do
     File.read!("lib/fixtures/day2.txt")
