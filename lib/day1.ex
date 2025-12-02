@@ -28,6 +28,7 @@ defmodule Day1 do
     case new_pos do
       0 ->
         {new_pos, div(sum, 100) - 1}
+
       _ ->
         {new_pos, div(sum, 100)}
     end
@@ -45,17 +46,18 @@ defmodule Day1 do
         case new_pos do
           0 ->
             {new_pos, div(abs(sum), 100)}
+
           _ ->
-          {new_pos, div(abs(sum), 100) + (if start != 0, do: 1, else: 0)}
+            {new_pos, div(abs(sum), 100) + if(start != 0, do: 1, else: 0)}
         end
     end
   end
 
   defp parse_moves do
-      File.stream!("lib/fixtures/day1.txt")
-      |> Enum.map(fn s ->
-        String.trim(s)
-        |> String.split_at(1)
-      end)
+    File.stream!("lib/fixtures/day1.txt")
+    |> Enum.map(fn s ->
+      String.trim(s)
+      |> String.split_at(1)
+    end)
   end
 end
