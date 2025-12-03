@@ -1,50 +1,37 @@
 defmodule Day3 do
   def part1 do
+    process_banks(2)
+  end
+
+  def part2 do
+    process_banks(12)
+  end
+
+  defp process_banks(num_digits) do
     parse_banks()
-    |> Enum.map(&maximize_bank/1)
+    |> Enum.map(fn bank -> maximize_bank(bank, num_digits) end)
     |> Enum.sum()
   end
 
-  def maximize_bank(bank) do
-    Enum.reduce(Integer.digits(bank), {nil, nil, nil}, fn this_digit, locked_digits ->
-      process_digit(this_digit, locked_digits)
-    end)
-    |> then(fn {first_digit, second_digit, previous_first_digit} ->
-      cond do
-        second_digit == nil ->
-          [previous_first_digit, first_digit]
-        true ->
-          [first_digit, second_digit]
-      end
-    end)
+  def maximize_bank(bank, num_digits) do
+    digits = Integer.digits(bank)
+
+    1..num_digits
+    |> Enum.reduce({[], Enum.slice(digits, 0..-num_digits//1), 0},
+        fn digit_num, {selected_digits, remaining_digits, offset_of_remainder} ->
+          max_remaining_digit = Enum.max(remaining_digits)
+          index_of_max_remaining_digit = Enum.find_index(remaining_digits, fn d -> d == max_remaining_digit end)
+          new_start = index_of_max_remaining_digit + offset_of_remainder + 1
+          new_end = -(num_digits - digit_num)
+          new_offset_of_remainder = new_start
+          {[max_remaining_digit | selected_digits], Enum.slice(digits, new_start..new_end//1), new_offset_of_remainder}
+        end)
+    |> elem(0)
+    |> Enum.reverse()
     |> Integer.undigits()
   end
 
-  def process_digit(this_digit, {nil, nil, _}) do
-    {this_digit, nil, nil}
-  end
-
-  def process_digit(this_digit, {first_digit, nil, _}) do
-    cond do
-      this_digit > first_digit ->
-        {this_digit, nil, first_digit}
-      true ->
-        {first_digit, this_digit, nil}
-    end
-  end
-
-  def process_digit(this_digit, {first_digit, second_digit, previous_first_digit}) do
-    cond do
-      this_digit > first_digit ->
-        {this_digit, nil, first_digit}
-      this_digit > second_digit ->
-        {first_digit, this_digit, nil}
-      true ->
-        {first_digit, second_digit, previous_first_digit}
-    end
-  end
-
-  def parse_banks do
+  defp parse_banks do
     File.stream!("lib/fixtures/day3.txt")
     |> Enum.map(fn s ->
       String.trim(s)
