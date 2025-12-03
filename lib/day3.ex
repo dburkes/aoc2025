@@ -9,27 +9,19 @@ defmodule Day3 do
 
   defp process_banks(num_digits) do
     parse_banks()
-    |> Enum.map(fn bank -> maximize_bank(bank, num_digits) end)
-    |> Enum.sum()
+    |> Enum.sum_by(&maximize_bank(&1, num_digits))
   end
 
   def maximize_bank(bank, num_digits) do
     digits = Integer.digits(bank)
-
-    1..num_digits
-    |> Enum.reduce({[], Enum.slice(digits, 0..-num_digits//1), 0},
-        fn digit_num, {selected_digits, remaining_digits, offset_of_remainder} ->
-          max_remaining_digit = Enum.max(remaining_digits)
-          index_of_max_remaining_digit = Enum.find_index(remaining_digits, fn d -> d == max_remaining_digit end)
-          new_start = index_of_max_remaining_digit + offset_of_remainder + 1
-          new_end = -(num_digits - digit_num)
-          new_offset_of_remainder = new_start
-          {[max_remaining_digit | selected_digits], Enum.slice(digits, new_start..new_end//1), new_offset_of_remainder}
-        end)
-    |> elem(0)
-    |> Enum.reverse()
+    to_remove = length(digits) - num_digits
+    Enum.reduce(1..to_remove, digits, fn _, acc -> maximize_digit(acc) end)
     |> Integer.undigits()
   end
+
+  def maximize_digit([_]), do: []
+  def maximize_digit([a, b | rest]) when a < b, do: [b | rest]
+  def maximize_digit([b | rest]), do: [b | maximize_digit(rest)]
 
   defp parse_banks do
     File.stream!("lib/fixtures/day3.txt")
