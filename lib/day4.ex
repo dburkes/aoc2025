@@ -1,10 +1,62 @@
 defmodule Day4 do
   def part1 do
-    parse_rolls()
+    parse_grid()
     |> count_accessible_rolls()
   end
 
+  def part2 do
+    grid = parse_grid()
+    count_rolls(grid) - count_rolls(evolve_all(grid))
+  end
+
+  def count_rolls(grid) do
+    Enum.reduce(grid, 0, fn row, acc ->
+      acc + Enum.count(String.graphemes(row), fn cell -> cell == "@" end)
+    end)
+  end
+
   def count_accessible_rolls(grid) do
+    neighbor_counts(grid)
+    |> List.flatten()
+    |> Enum.count(fn n -> n < 4 end)
+  end
+
+  def evolve_one(grid) do
+    neighbor_counts(grid)
+    |> Enum.map_reduce(0, fn row, row_num ->
+      {
+        Enum.map_reduce(row, 0, fn cell, col_num ->
+          orig_cell = String.at(Enum.at(grid, row_num), col_num)
+
+          new_cell =
+            cond do
+              cell < 4 ->
+                "."
+
+              true ->
+                orig_cell
+            end
+
+          {new_cell, col_num + 1}
+        end)
+        |> elem(0) |> Enum.join(),
+        row_num + 1
+      }
+    end)
+    |> elem(0)
+  end
+
+  def evolve_all(grid) do
+    new_grid = evolve_one(grid)
+
+    if new_grid == grid do
+      new_grid
+    else
+      evolve_all(new_grid)
+    end
+  end
+
+  def neighbor_counts(grid) do
     rows = length(grid)
     cols = String.length(Enum.at(grid, 0))
 
@@ -19,8 +71,6 @@ defmodule Day4 do
       }
     end)
     |> elem(0)
-    |> List.flatten()
-    |> Enum.count(fn n -> n < 4 end)
   end
 
   def count_neighbors(grid, row, col, rows, cols) do
@@ -45,11 +95,11 @@ defmodule Day4 do
     0
   end
 
-  defp neighbor_val(grid, row, col, rows, cols) do
+  defp neighbor_val(grid, row, col, _rows, _cols) do
     if String.at(Enum.at(grid, row), col) == ".", do: 0, else: 1
   end
 
-  defp parse_rolls do
+  defp parse_grid do
     File.stream!("lib/fixtures/day4.txt")
     |> Enum.map(&String.trim/1)
   end
