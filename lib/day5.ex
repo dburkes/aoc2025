@@ -9,6 +9,27 @@ defmodule Day5 do
     end)
   end
 
+  def part2 do
+    parse_input()
+    |> elem(0)
+    |> Enum.sort()
+    |> Enum.reduce(MapSet.new(), fn range, disjoint_ranges ->
+      cond do
+        overlapping_range = Enum.find(disjoint_ranges, fn r -> not Range.disjoint?(r, range) end) ->
+          merged_range = Range.new(
+            min(overlapping_range.first, range.first),
+            max(overlapping_range.last, range.last)
+          )
+
+          MapSet.delete(disjoint_ranges, overlapping_range) |> MapSet.put(merged_range)
+
+        true ->
+          MapSet.put(disjoint_ranges, range)
+      end
+    end)
+    |> Enum.sum_by(&Range.size/1)
+  end
+
   defp parse_input do
     File.stream!("lib/fixtures/day5.txt")
     |> Enum.map(&String.trim/1)
@@ -19,11 +40,13 @@ defmodule Day5 do
 
         String.contains?(line, "-") ->
           [start_str, end_str] = String.split(line, "-")
-          { [Range.new(String.to_integer(start_str), String.to_integer(end_str)) | ranges], ingredients }
 
-          true ->
-            { ranges, [String.to_integer(line) | ingredients] }
-        end
-      end)
-    end
+          {[Range.new(String.to_integer(start_str), String.to_integer(end_str)) | ranges],
+           ingredients}
+
+        true ->
+          {ranges, [String.to_integer(line) | ingredients]}
+      end
+    end)
+  end
 end

@@ -4,4 +4,8 @@ defmodule Day5Test do
   test "part1" do
     assert Day5.part1() == 513
   end
+
+  test "part2" do
+    assert Day5.part2() == 339668510830757
+  end
 end
