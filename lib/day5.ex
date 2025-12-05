@@ -12,6 +12,12 @@ defmodule Day5 do
   def part2 do
     parse_input()
     |> elem(0)
+    |> optimize_ranges()
+    |> Enum.sum_by(&Range.size/1)
+  end
+
+  def optimize_ranges(ranges) do
+    ranges
     |> Enum.sort()
     |> Enum.reduce(MapSet.new(), fn range, disjoint_ranges ->
       cond do
@@ -27,7 +33,6 @@ defmodule Day5 do
           MapSet.put(disjoint_ranges, range)
       end
     end)
-    |> Enum.sum_by(&Range.size/1)
   end
 
   defp parse_input do
