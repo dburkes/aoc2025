@@ -22,10 +22,11 @@ defmodule Day5 do
     |> Enum.reduce(MapSet.new(), fn range, disjoint_ranges ->
       cond do
         overlapping_range = Enum.find(disjoint_ranges, fn r -> not Range.disjoint?(r, range) end) ->
-          merged_range = Range.new(
-            min(overlapping_range.first, range.first),
-            max(overlapping_range.last, range.last)
-          )
+          merged_range =
+            Range.new(
+              min(overlapping_range.first, range.first),
+              max(overlapping_range.last, range.last)
+            )
 
           MapSet.delete(disjoint_ranges, overlapping_range) |> MapSet.put(merged_range)
 

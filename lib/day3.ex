@@ -15,6 +15,7 @@ defmodule Day3 do
   def maximize_bank(bank, num_digits) do
     digits = Integer.digits(bank)
     to_remove = length(digits) - num_digits
+
     Enum.reduce(1..to_remove, digits, fn _, acc -> maximize_digit(acc) end)
     |> Integer.undigits()
   end

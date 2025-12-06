@@ -3,24 +3,24 @@ defmodule Day3Test do
 
   describe "bank optimization" do
     test "leading digits" do
-      assert Day3.maximize_bank(987654321111111, 2) == 98
-      assert Day3.maximize_bank(987654321111111, 12) == 987654321111
+      assert Day3.maximize_bank(987_654_321_111_111, 2) == 98
+      assert Day3.maximize_bank(987_654_321_111_111, 12) == 987_654_321_111
     end
 
     test "trailing digits" do
-      assert Day3.maximize_bank(234234234234278, 2) == 78
-      assert Day3.maximize_bank(234934234234278, 12) == 934234234278
+      assert Day3.maximize_bank(234_234_234_234_278, 2) == 78
+      assert Day3.maximize_bank(234_934_234_234_278, 12) == 934_234_234_278
     end
 
     test "leading and trailing digits" do
-      assert Day3.maximize_bank(811111111111119, 2) == 89
-      assert Day3.maximize_bank(811111111111119, 12) == 811111111119
+      assert Day3.maximize_bank(811_111_111_111_119, 2) == 89
+      assert Day3.maximize_bank(811_111_111_111_119, 12) == 811_111_111_119
     end
 
     test "scattered digits" do
-      assert Day3.maximize_bank(818181911112111, 2) == 92
-      assert Day3.maximize_bank(234234234234278, 12) == 434234234278
-      assert Day3.maximize_bank(818181911112111, 12) == 888911112111
+      assert Day3.maximize_bank(818_181_911_112_111, 2) == 92
+      assert Day3.maximize_bank(234_234_234_234_278, 12) == 434_234_234_278
+      assert Day3.maximize_bank(818_181_911_112_111, 12) == 888_911_112_111
     end
   end
 
@@ -30,8 +30,7 @@ defmodule Day3Test do
     end
 
     test "part2" do
-      assert Day3.part2() == 170147128753455
+      assert Day3.part2() == 170_147_128_753_455
     end
-
   end
 end

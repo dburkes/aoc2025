@@ -6,16 +6,17 @@ defmodule Day4Test do
       # @.@.
       # @@@@
       # @.@.
-      grid = MapSet.new([
-        {0, 0},
-        {2, 0},
-        {0, 1},
-        {1, 1},
-        {2, 1},
-        {3, 1},
-        {0, 2},
-        {2, 2}
-      ])
+      grid =
+        MapSet.new([
+          {0, 0},
+          {2, 0},
+          {0, 1},
+          {1, 1},
+          {2, 1},
+          {3, 1},
+          {0, 2},
+          {2, 2}
+        ])
 
       assert Day4.roll_free?(grid, {0, 0})
       assert Day4.roll_free?(grid, {2, 0})

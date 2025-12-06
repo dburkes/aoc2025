@@ -6,6 +6,6 @@ defmodule Day5Test do
   end
 
   test "part2" do
-    assert Day5.part2() == 339668510830757
+    assert Day5.part2() == 339_668_510_830_757
   end
 end

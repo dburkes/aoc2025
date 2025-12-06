@@ -43,16 +43,15 @@ defmodule Day2Test do
     test "even length ID with multiple repeats is invalid" do
       assert Day2.invalid?([2, 1, 2, 1, 2, 1, 2, 1, 2, 1], true) == true
     end
-
   end
 
   describe "AOC quizes" do
     test "part1" do
-      assert Day2.part1() == 13919717792
+      assert Day2.part1() == 13_919_717_792
     end
 
     test "part2" do
-      assert Day2.part2() == 14582313461
+      assert Day2.part2() == 14_582_313_461
     end
   end
 end
