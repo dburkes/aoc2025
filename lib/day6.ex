@@ -18,7 +18,7 @@ defmodule Day6 do
   def process([n1 | rest], operator) when operator == "+", do: n1 + process(rest, operator)
   def process([n1 | rest], operator) when operator == "*", do: n1 * process(rest, operator)
 
-  def parse_raw(stream \\ File.stream!("lib/fixtures/day6.txt")) do
+  defp parse_raw(stream) do
     {numbers, operators} =
       Enum.reduce(stream, {[], []}, fn line, {numbers, operators} ->
         line = String.trim(line)
@@ -43,7 +43,7 @@ defmodule Day6 do
       |> Enum.reverse()
       |> Enum.map(fn line -> Enum.map(line, &String.to_integer/1) end)
       |> Enum.zip()
-      |> Enum.map(fn line -> Tuple.to_list(line) end)
+      |> Enum.map(&Tuple.to_list/1)
 
     {numbers, String.split(raw_operators, ~r/\s+/)}
   end
