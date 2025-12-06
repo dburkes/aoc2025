@@ -8,34 +8,19 @@ defmodule Day6Test do
   """
 
   test "normal parsing" do
-    {:ok, stream} = StringIO.open(@input)
-    io = IO.binstream(stream, :line)
-
-    {numbers, operators} = Day6.parse_conventional(io)
-
-    assert(length(numbers) == 3)
-    assert(Enum.at(numbers, 0) == [8, 752])
-    assert(Enum.at(numbers, 1) == [626, 33])
-    assert(Enum.at(numbers, 2) == [55, 21])
-    assert operators == ["+", "*", "*"]
+    assert Day6.parse_conventional(@input) == [
+             {[8, 752], :+},
+             {[626, 33], :*},
+             {[55, 21], :*}
+           ]
   end
 
   test "rtl parsing" do
-    {:ok, stream} = StringIO.open(@input)
-    io = IO.binstream(stream, :line)
-
-    {numbers, operators} = Day6.parse_rtl(io)
-
-    assert(length(numbers) == 3)
-    assert(Enum.at(numbers, 0) == [2, 5, 87])
-    assert(Enum.at(numbers, 1) == [6, 23, 63])
-    assert(Enum.at(numbers, 2) == [51, 52])
-    assert operators == ["+", "*", "*"]
-  end
-
-  test "calculation" do
-    assert(Day6.calculate([8, 752, 2], "+") == 762)
-    assert(Day6.calculate([626, 2, 1], "*") == 1252)
+    assert Day6.parse_rtl(@input) == [
+             {[2, 5, 87], :+},
+             {[6, 23, 63], :*},
+             {[51, 52], :*}
+           ]
   end
 
   test "part1" do
