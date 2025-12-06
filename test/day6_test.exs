@@ -3,20 +3,33 @@ defmodule Day6Test do
 
   @input """
   8   626 55
-  752 333 21
+  752 33  21
   +   *   *
   """
 
-  test "parsing" do
+  test "normal parsing" do
     {:ok, stream} = StringIO.open(@input)
     io = IO.binstream(stream, :line)
 
-    {numbers, operators} = Day6.parse_input(io)
+    {numbers, operators} = Day6.parse_conventional(io)
 
     assert(length(numbers) == 3)
     assert(Enum.at(numbers, 0) == [8, 752])
-    assert(Enum.at(numbers, 1) == [626, 333])
+    assert(Enum.at(numbers, 1) == [626, 33])
     assert(Enum.at(numbers, 2) == [55, 21])
+    assert operators == ["+", "*", "*"]
+  end
+
+  test "rtl parsing" do
+    {:ok, stream} = StringIO.open(@input)
+    io = IO.binstream(stream, :line)
+
+    {numbers, operators} = Day6.parse_rtl(io)
+
+    assert(length(numbers) == 3)
+    assert(Enum.at(numbers, 0) == [2, 5, 87])
+    assert(Enum.at(numbers, 1) == [6, 23, 63])
+    assert(Enum.at(numbers, 2) == [51, 52])
     assert operators == ["+", "*", "*"]
   end
 
@@ -27,5 +40,9 @@ defmodule Day6Test do
 
   test "part1" do
     assert Day6.part1() == 7_098_065_460_541
+  end
+
+  test "part2" do
+    assert Day6.part2() == 13_807_151_830_618
   end
 end
