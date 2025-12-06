@@ -33,9 +33,9 @@ defmodule Day6Test do
     assert operators == ["+", "*", "*"]
   end
 
-  test "processing" do
-    assert(Day6.process([8, 752, 2], "+") == 762)
-    assert(Day6.process([626, 2, 1], "*") == 1252)
+  test "calculation" do
+    assert(Day6.calculate([8, 752, 2], "+") == 762)
+    assert(Day6.calculate([626, 2, 1], "*") == 1252)
   end
 
   test "part1" do

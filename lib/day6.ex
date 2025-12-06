@@ -8,15 +8,13 @@ defmodule Day6 do
     operators
     |> Enum.with_index()
     |> Enum.reduce([], fn {op, index}, acc ->
-      [process(Enum.at(numbers, index), op) | acc]
+      [calculate(Enum.at(numbers, index), op) | acc]
     end)
     |> Enum.sum()
   end
 
-  def process([], operator) when operator == "+", do: 0
-  def process([], operator) when operator == "*", do: 1
-  def process([n1 | rest], operator) when operator == "+", do: n1 + process(rest, operator)
-  def process([n1 | rest], operator) when operator == "*", do: n1 * process(rest, operator)
+  def calculate(nums, operator) when operator == "+", do: Enum.sum(nums)
+  def calculate(nums, operator) when operator == "*", do: Enum.product(nums)
 
   defp parse_raw(stream) do
     {numbers, operators} =
