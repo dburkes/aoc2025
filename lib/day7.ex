@@ -1,42 +1,69 @@
 defmodule Day7 do
-  def part1() do
-    {grid, beam} = parse()
-
-    1..(length(grid) - 1)
-    |> Enum.reduce({grid, [beam], 0}, fn row_num, {grid, beams, splits} ->
-      cast_beams(grid, beams, splits, row_num)
-    end)
-    |> elem(2)
+  def part1(input \\ File.read!("lib/fixtures/day7.txt")) do
+    parse(input)
+    |> cast_conventional()
   end
 
-  def cast_beams(grid, beams, splits, row) do
-    next_row = String.to_charlist(Enum.at(grid, row))
+  def part2(input \\ File.read!("lib/fixtures/day7.txt")) do
+    parse(input)
+    |> cast_quantum()
+  end
 
-    {new_beams, new_splits} =
-      beams
-      |> Enum.reduce({MapSet.new(), splits}, fn beam_index, {beams, splits} ->
-        case Enum.at(next_row, beam_index) do
-          ?. ->
-            {MapSet.put(beams, beam_index), splits}
+  def cast_conventional({start_col, splitters}) do
+    Enum.reduce(splitters, {MapSet.new([start_col]), 0}, fn splits, {beams, count} ->
+      hits = MapSet.intersection(beams, splits)
 
-          ?^ ->
-            {MapSet.put(beams, beam_index - 1) |> MapSet.put(beam_index + 1), splits + 1}
+      new_beams =
+        Enum.reduce(hits, MapSet.new(), fn hit, acc ->
+          MapSet.put(acc, hit - 1) |> MapSet.put(hit + 1)
+        end)
+
+      beams = beams |> MapSet.difference(hits) |> MapSet.union(new_beams)
+
+      {beams, MapSet.size(hits) + count}
+    end)
+    |> elem(1)
+  end
+
+  def cast_quantum({start_col, splitters}) do
+    Enum.reduce(splitters, %{start_col => 1}, fn splits, beams ->
+      Enum.reduce(splits, beams, fn s, acc ->
+        case Map.pop(acc, s) do
+          {nil, map} ->
+            map
+
+          {count, map} ->
+            Map.merge(
+              map,
+              %{
+                (s + 1) => count,
+                (s - 1) => count
+              },
+              fn _k, a, b -> a + b end
+            )
         end
       end)
-
-    new_beams_list =
-      MapSet.to_list(new_beams)
-      |> Enum.reject(fn n -> n < 0 || n > length(next_row) end)
-
-    {grid, new_beams_list, new_splits}
+    end)
+    |> Enum.sum_by(&elem(&1, 1))
   end
 
-  def parse(input \\ File.read!("lib/fixtures/day7.txt")) do
-    grid = String.split(input, "\n", trim: true)
+  def parse(input) do
+    [first | rest] = String.split(input)
 
-    {
-      grid,
-      Enum.at(grid, 0) |> String.graphemes() |> Enum.find_index(&(&1 == "S"))
-    }
+    start_col =
+      first
+      |> String.graphemes()
+      |> Enum.find_index(&(&1 == "S"))
+
+    splitters =
+      Enum.map(rest, fn row ->
+        row
+        |> String.to_charlist()
+        |> Enum.with_index()
+        |> Enum.filter(&(elem(&1, 0) == ?^))
+        |> MapSet.new(&elem(&1, 1))
+      end)
+
+    {start_col, splitters}
   end
 end

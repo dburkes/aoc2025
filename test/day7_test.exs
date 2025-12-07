@@ -1,4 +1,4 @@
-defmodule Day6Test do
+defmodule Day7Test do
   use ExUnit.Case
 
   @input """
@@ -21,33 +21,33 @@ defmodule Day6Test do
   """
 
   test "parsing" do
-    {grid, beam} = Day7.parse(@input)
-    assert length(grid) == 16
-    assert beam == 7
+    {start_col, splitters} = Day7.parse(@input)
+    assert start_col == 7
+    assert length(splitters) == 15
+    assert MapSet.size(Enum.at(splitters, 1)) == 1
+    assert MapSet.size(Enum.at(splitters, 3)) == 2
+    assert MapSet.size(Enum.at(splitters, 5)) == 3
+    assert MapSet.size(Enum.at(splitters, 7)) == 3
+    assert MapSet.size(Enum.at(splitters, 9)) == 4
+    assert MapSet.size(Enum.at(splitters, 11)) == 3
+    assert MapSet.size(Enum.at(splitters, 13)) == 6
   end
 
-  test "beam casting" do
-    {grid, beam} = Day7.parse(@input)
-    splits = 0
+  test "conventional beam casting" do
+    splits = Day7.parse(@input) |> Day7.cast_conventional()
+    assert splits == 21
+  end
 
-    {_, beams, splits} = Day7.cast_beams(grid, [beam], splits, 1)
-    assert beams == [7]
-    assert splits == 0
-
-    {_, beams, splits} = Day7.cast_beams(grid, beams, splits, 2)
-    assert beams == [6, 8]
-    assert splits == 1
-
-    {_, beams, splits} = Day7.cast_beams(grid, beams, splits, 3)
-    assert beams == [6, 8]
-    assert splits == 1
-
-    {_, beams, splits} = Day7.cast_beams(grid, beams, splits, 4)
-    assert beams == [5, 7, 9]
-    assert splits == 3
+  test "quantum beam casting" do
+    worlds = Day7.parse(@input) |> Day7.cast_quantum()
+    assert worlds == 40
   end
 
   test "part1" do
     assert Day7.part1() == 1518
+  end
+
+  test "part2" do
+    assert Day7.part2() == 25_489_586_715_621
   end
 end
