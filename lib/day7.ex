@@ -1,11 +1,11 @@
 defmodule Day7 do
-  def part1(input \\ File.read!("lib/fixtures/day7.txt")) do
-    parse(input)
+  def part1() do
+    parse()
     |> cast_conventional()
   end
 
-  def part2(input \\ File.read!("lib/fixtures/day7.txt")) do
-    parse(input)
+  def part2() do
+    parse()
     |> cast_quantum()
   end
 
@@ -47,7 +47,7 @@ defmodule Day7 do
     |> Enum.sum_by(&elem(&1, 1))
   end
 
-  def parse(input) do
+  def parse(input \\ File.read!("lib/fixtures/day7.txt")) do
     [first | rest] = String.split(input)
 
     start_col =
