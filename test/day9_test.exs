@@ -26,6 +26,14 @@ defmodule Day9Test do
     assert Day9.area({{2, 5}, {11, 1}}) == 50
   end
 
+  test "within?" do
+    tiles = Day9.parse(@input)
+    refute Day9.within?({{7, 1}, {11, 7}}, tiles)
+    assert Day9.within?({{7, 3}, {2, 3}}, tiles)
+    assert Day9.within?({{2, 5}, {9, 7}}, tiles)
+    refute Day9.within?({{2, 5}, {11, 1}}, tiles)
+  end
+
   test "part 1" do
     assert Day9.part1() == 4_725_826_296
   end
