@@ -3,9 +3,7 @@ defmodule Day5 do
     {ranges, ingredients} = parse_input()
 
     Enum.count(ingredients, fn ingredient ->
-      Enum.any?(ranges, fn range ->
-        ingredient in range
-      end)
+      Enum.any?(ranges, &Kernel.in(ingredient, &1))
     end)
   end
 

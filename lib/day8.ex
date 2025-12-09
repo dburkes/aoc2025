@@ -22,7 +22,7 @@ defmodule Day8 do
   def create_circuits(boxes, count) do
     circuits =
       boxes
-      |> Enum.map(fn box -> MapSet.new([box]) end)
+      |> Enum.map(&MapSet.new([&1]))
 
     distances(boxes)
     |> Enum.with_index()
@@ -60,7 +60,7 @@ defmodule Day8 do
       distances(box, Enum.slice(boxes, (index + 1)..-1//1))
     end)
     |> Enum.sort_by(fn {_, dist} -> dist end)
-    |> Enum.map(fn {box_pair, _} -> MapSet.to_list(box_pair) end)
+    |> Enum.map(&MapSet.to_list(elem(&1, 0)))
   end
 
   def distances(box, other_boxes) do

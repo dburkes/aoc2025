@@ -3,26 +3,20 @@ defmodule Day2 do
 
   def part1 do
     parse_ranges()
-    |> Enum.map(fn range ->
-      find_invalid_ids_in_range(range, false)
-    end)
+    |> Enum.map(&find_invalid_ids_in_range(&1, false))
     |> List.flatten()
     |> Enum.sum()
   end
 
   def part2 do
     parse_ranges()
-    |> Enum.map(fn range ->
-      find_invalid_ids_in_range(range, true)
-    end)
+    |> Enum.map(&find_invalid_ids_in_range(&1, true))
     |> List.flatten()
     |> Enum.sum()
   end
 
   def find_invalid_ids_in_range(range, multiple_repeats) do
-    Enum.filter(range, fn id ->
-      invalid_id?(Integer.digits(id), multiple_repeats)
-    end)
+    Enum.filter(range, &invalid_id?(Integer.digits(&1), multiple_repeats))
   end
 
   def invalid_id?(digits, multiple_repeats \\ false) do

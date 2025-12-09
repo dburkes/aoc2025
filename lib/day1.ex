@@ -2,7 +2,7 @@ defmodule Day1 do
   def part1 do
     parse_moves()
     |> process_moves()
-    |> Enum.count(fn {pos, _} -> pos == 0 end)
+    |> Enum.count(&(elem(&1, 0) == 0))
   end
 
   def part2 do
