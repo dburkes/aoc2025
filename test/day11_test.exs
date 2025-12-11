@@ -34,6 +34,6 @@ defmodule Day11Test do
   end
 
   test "part 2" do
-    assert Day11.part2() == 0
+    assert Day11.part2() == 358_564_784_931_864
   end
 end
