@@ -1,4 +1,4 @@
-defmodule Day10Test do
+defmodule Day11Test do
   use ExUnit.Case
 
   @input """
@@ -31,5 +31,9 @@ defmodule Day10Test do
 
   test "part 1" do
     assert Day11.part1() == 497
+  end
+
+  test "part 2" do
+    assert Day11.part2() == 0
   end
 end
